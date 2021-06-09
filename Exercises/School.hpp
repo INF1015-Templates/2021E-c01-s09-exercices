@@ -29,16 +29,23 @@ class School;
 // et une moyenne globale, ainsi que les accesseurs/modificateurs associés.
 class Student {
 public:
-	Student(int id, const string& program)
+	Student(int id, const string& firstName, const string& lastName, const string& program)
 	: studentId_(id),
+	  firstName_(firstName),
+	  lastName_(lastName),
+	  fullName_(firstName + " " + lastName),
 	  program_(program) { }
 
 	// On met le destructeur virtuel car on sait que la classe va être dérivée.
 	virtual ~Student() = default;
 
-	void updateGpa(double gpa) { gpa_ = gpa; }
 	int getStudentId() const { return studentId_; }
+	const string& getFirstName() const { return firstName_; }
+	const string& getLastName() const { return lastName_; }
+	const string& getName() const { return fullName_; }
+
 	double getGpa() const { return gpa_; }
+	void updateGpa(double gpa) { gpa_ = gpa; }
 
 	void changeProgram(const string& program) {
 		haveExistentialCrisis();
@@ -57,6 +64,9 @@ private:
 	}
 
 	int    studentId_;
+	string firstName_;
+	string lastName_;
+	string fullName_;
 	double gpa_ = 0.0;
 };
 
@@ -94,8 +104,8 @@ protected:
 class GraduateStudent : public Student
 {
 public:
-	GraduateStudent(int id, string program, Professor* supervisor)
-	: Student(id, program),
+	GraduateStudent(int id, const string& firstName, const string& lastName, string program, Professor* supervisor)
+	: Student(id, firstName, lastName, program),
 	  supervisor_(supervisor) { }
 
 	Professor* getSupervisor() const { return supervisor_; }
@@ -166,14 +176,14 @@ private:
 
 class School {
 public:
-	void addNewUndergrad(int studentId, const string& program) {
-		auto uptr = make_unique<UndergradStudent>(studentId, program);
+	void addNewUndergrad(int studentId, const string& firstName, const string& lastName, const string& program) {
+		auto uptr = make_unique<UndergradStudent>(studentId, firstName, lastName, program);
 		undergrads_[studentId] = uptr.get();
 		students_[studentId] = move(uptr);
 	}
 
-	void addNewGrad(int studentId, const string& program, Professor* supervisor = nullptr) {
-		auto uptr = make_unique<GraduateStudent>(studentId, program, supervisor);
+	void addNewGrad(int studentId, const string& firstName, const string& lastName, const string& program, Professor* supervisor = nullptr) {
+		auto uptr = make_unique<GraduateStudent>(studentId, firstName, lastName, program, supervisor);
 		gradStudents_[studentId] = uptr.get();
 		students_[studentId] = move(uptr);
 	}

@@ -47,7 +47,7 @@ void runBracketsExample() {
 void runSchoolExample() {
 	School school;
 	Professor prof(0xC0FFEE);
-	school.addNewGrad(0xDEADBEEF, "Infologie", &prof);
+	school.addNewGrad(0xDEADBEEF, "Marjolaine", "Perreault", "Infologie", &prof);
 	GraduateStudent& foo = *school.findGrad(0xDEADBEEF);
 	Student& bar = foo;
 	foo.changeSupervisor(nullptr);
